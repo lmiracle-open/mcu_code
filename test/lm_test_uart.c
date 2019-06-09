@@ -30,7 +30,7 @@
 *******************************************************************************/
 static int8_t lm_test_uart1_tx(void)
 {
-    lm_kprintf("========== lmiracle uart1 test ==========");
+    //lm_kprintf("========== lmiracle uart1 test ==========");
 
     return LM_ERR_SUCCESS;
 }

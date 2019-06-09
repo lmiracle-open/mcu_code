@@ -24,8 +24,10 @@
 
 #define lm_delay_ms(cnt)        rt_thread_delay(cnt)    /* ms延时 */
 
+#if 0
 #define lm_kprintf(format,...)  \
         rt_kprintf(format"",##__VA_ARGS__)    /* 格式化输出 */
+#endif
 
 #endif
 

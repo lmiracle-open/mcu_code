@@ -18,6 +18,8 @@
 #include "lm_driver.h"
 #include "lm_app.h"
 
+#include "lm_stdio.h"
+
 /*******************************************************************************
 * Description    : 宏定义区
 *******************************************************************************/
@@ -90,11 +92,14 @@ static void lm_thread_3s_entry(void* parameter);            /* 线程3函数体 
 *******************************************************************************/
 static void lm_logo_show(void)
 {
-    /* 1.硬件版本 */
-
-    /* 2.软件版本 */
-
-    return ;
+    lm_kprintf("\r\n");
+    lm_kprintf("************************************************************\r\n");
+    lm_kprintf("Name: LANMENG Scientific Creation \r\n");
+    lm_kprintf("Site: https: //www.lmiracle.com \r\n");
+    lm_kprintf("Hardver: LMiracle_Iot_EBP_190322_V1.2\r\n");
+    lm_kprintf("Softver: LMiracle_MCU_Platform_V1.0\r\n");
+    lm_kprintf("************************************************************\r\n");
+    lm_kprintf("\r\n");
 }
 
 /*******************************************************************************

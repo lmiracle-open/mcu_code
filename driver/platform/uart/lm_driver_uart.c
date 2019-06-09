@@ -18,7 +18,9 @@
 /*******************************************************************************
 * Description   : 模块内部变量定义区
 *******************************************************************************/
-static UART_HandleTypeDef __g_uart_handler;             /* uart 句柄 */
+static UART_HandleTypeDef __g_uart1_handler;             /* uart1 句柄  */
+static UART_HandleTypeDef __g_uart2_handler;             /* uart2 句柄  */
+static UART_HandleTypeDef __g_uart3_handler;             /* uart3 句柄  */
 
 #if USART1_IRQ_EN
 static uint8_t __g_hal_u1_rx_buf[HAL_RX_BUF_SIZE];      /* hal串口1接收缓存 */
@@ -51,28 +53,55 @@ static uint16_t __g_u3_rx_offset = 0;                   /* 串口3接收偏移 *
 void lm_uart_para_set(USART_TypeDef *port, uint32_t bound)
 {
     /* 1.设置UART参数 */
-    __g_uart_handler.Instance = port;
-    __g_uart_handler.Init.BaudRate = bound;
-    __g_uart_handler.Init.WordLength = UART_WORDLENGTH_8B;
-    __g_uart_handler.Init.Parity = UART_PARITY_NONE;
-    __g_uart_handler.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-    __g_uart_handler.Init.Mode = UART_MODE_TX_RX;
+    if (UART1 == port) {
+        __g_uart1_handler.Instance = port;
+        __g_uart1_handler.Init.BaudRate = bound;
+        __g_uart1_handler.Init.WordLength = UART_WORDLENGTH_8B;
+        __g_uart1_handler.Init.Parity = UART_PARITY_NONE;
+        __g_uart1_handler.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+        __g_uart1_handler.Init.Mode = UART_MODE_TX_RX;
 
-    /* 2.初始化参数配置 */
-    HAL_UART_Init(&__g_uart_handler);
+        /* 2.初始化参数配置 */
+        HAL_UART_Init(&__g_uart1_handler);
 
-    /* 3.开启接收中断 */
-#if USART1_IRQ_EN
-    HAL_UART_Receive_IT(&__g_uart_handler, __g_hal_u1_rx_buf, HAL_RX_BUF_SIZE);
-#endif
+        /* 3.开启接收中断 */
+    #if USART1_IRQ_EN
+        HAL_UART_Receive_IT(&__g_uart_handler, __g_hal_u1_rx_buf, HAL_RX_BUF_SIZE);
+    #endif
 
-#if USART2_IRQ_EN
-    HAL_UART_Receive_IT(&__g_uart_handler, __g_hal_u2_rx_buf, HAL_RX_BUF_SIZE);
-#endif
+    } else if (UART2 == port) {
+        __g_uart2_handler.Instance = port;
+        __g_uart2_handler.Init.BaudRate = bound;
+        __g_uart2_handler.Init.WordLength = UART_WORDLENGTH_8B;
+        __g_uart2_handler.Init.Parity = UART_PARITY_NONE;
+        __g_uart2_handler.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+        __g_uart2_handler.Init.Mode = UART_MODE_TX_RX;
 
-#if USART3_IRQ_EN
-    HAL_UART_Receive_IT(&__g_uart_handler, __g_hal_u3_rx_buf, HAL_RX_BUF_SIZE);
-#endif
+        /* 2.初始化参数配置 */
+        HAL_UART_Init(&__g_uart2_handler);
+
+    #if USART2_IRQ_EN
+        HAL_UART_Receive_IT(&__g_uart_handler, __g_hal_u2_rx_buf, HAL_RX_BUF_SIZE);
+    #endif
+
+    } else if (UART3 == port) {
+        __g_uart3_handler.Instance = port;
+        __g_uart3_handler.Init.BaudRate = bound;
+        __g_uart3_handler.Init.WordLength = UART_WORDLENGTH_8B;
+        __g_uart3_handler.Init.Parity = UART_PARITY_NONE;
+        __g_uart3_handler.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+        __g_uart3_handler.Init.Mode = UART_MODE_TX_RX;
+
+        /* 2.初始化参数配置 */
+        HAL_UART_Init(&__g_uart3_handler);
+
+    #if USART3_IRQ_EN
+        HAL_UART_Receive_IT(&__g_uart_handler, __g_hal_u3_rx_buf, HAL_RX_BUF_SIZE);
+    #endif
+
+    } else {
+        /* 不处理 */
+    }
 }
 
 /*******************************************************************************
@@ -132,25 +161,47 @@ void lm_uart_msp_init(UART_HandleTypeDef *huart)
     } else if (huart->Instance == USART3) {
 
         /* 1.开启外设时钟 */
-        __HAL_RCC_GPIOB_CLK_ENABLE();
+        __HAL_RCC_GPIOD_CLK_ENABLE();
         __HAL_RCC_USART3_CLK_ENABLE();
 
         /* 2.GPIO参数配置 */
-        GPIO_Initure.Pin = GPIO_PIN_10;
+        GPIO_Initure.Pin = GPIO_PIN_8;
         GPIO_Initure.Mode = GPIO_MODE_AF_PP;
         GPIO_Initure.Pull = GPIO_PULLUP;
         GPIO_Initure.Speed = GPIO_SPEED_FAST;
         GPIO_Initure.Alternate = GPIO_AF7_USART3;
-        HAL_GPIO_Init(GPIOB,&GPIO_Initure);
+        HAL_GPIO_Init(GPIOD,&GPIO_Initure);
 
-        GPIO_Initure.Pin = GPIO_PIN_11;
-        HAL_GPIO_Init(GPIOB,&GPIO_Initure);
+        GPIO_Initure.Pin = GPIO_PIN_9;
+        HAL_GPIO_Init(GPIOD,&GPIO_Initure);
 
         /* 3.使能中断 */
         #if USART3_IRQ_EN
         HAL_NVIC_EnableIRQ(USART3_IRQn);
         HAL_NVIC_SetPriority(USART3_IRQn,3,3);
         #endif
+    } else {
+        /* 不处理 */
+    }
+}
+
+/*******************************************************************************
+* FunName       : lm_uart_send()
+* Description   : UART发送数据
+* EntryParam    : port,串口号  *data,数据指针  len,数据长度
+* ReturnValue   : None
+*******************************************************************************/
+void lm_uart_send(USART_TypeDef *port, uint8_t *data, uint16_t len)
+{
+    if (UART1 == port) {
+        HAL_UART_Transmit(&__g_uart1_handler, data, len, 1000);
+        while(__HAL_UART_GET_FLAG(&__g_uart1_handler, UART_FLAG_TC) != SET);
+    } else if (UART2 == port) {
+        HAL_UART_Transmit(&__g_uart2_handler, data, len, 1000);
+        while(__HAL_UART_GET_FLAG(&__g_uart2_handler, UART_FLAG_TC) != SET);
+    } else if (UART3 == port) {
+        HAL_UART_Transmit(&__g_uart3_handler, data, len, 1000);
+        while(__HAL_UART_GET_FLAG(&__g_uart3_handler, UART_FLAG_TC) != SET);
     } else {
         /* 不处理 */
     }

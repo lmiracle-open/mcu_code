@@ -55,6 +55,14 @@
 *******************************************************************************/
 extern void lm_uart_para_set(USART_TypeDef *port, uint32_t bound);
 
+/*******************************************************************************
+* FunName       : lm_uart_send()
+* Description   : UART发送数据
+* EntryParam    : port,串口号  *data,数据指针  len,数据长度
+* ReturnValue   : None
+*******************************************************************************/
+extern void lm_uart_send(USART_TypeDef *port, uint8_t *data, uint16_t len);
+
 #endif
 
 /* end of file */
