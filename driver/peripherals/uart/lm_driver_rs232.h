@@ -17,23 +17,6 @@
 
 #include "lm_types.h"
 
-/*******************************************************************************
-* Description    : 宏定义区
-*******************************************************************************/
-#define LED_ON                  0                   /* LED点亮-低电平 */
-#define LED_OFF                 1                   /* LED熄灭-高电平 */
-
-#define LED1                    "PD3"               /* LED1端口 */
-#define LED2                    "PD4"               /* LED2端口 */
-#define LED3                    "PD7"               /* LED3端口 */
-
-#define LED1_ON         lm_gpio_pin_set(LED1, LED_ON)
-#define LED1_OFF        lm_gpio_pin_set(LED1, LED_OFF)
-#define LED2_ON         lm_gpio_pin_set(LED2, LED_ON)
-#define LED2_OFF        lm_gpio_pin_set(LED2, LED_OFF)
-#define LED3_ON         lm_gpio_pin_set(LED3, LED_ON)
-#define LED3_OFF        lm_gpio_pin_set(LED3, LED_OFF)
-
 #endif
 
 /* end of file */

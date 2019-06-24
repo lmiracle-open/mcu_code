@@ -22,12 +22,12 @@
 *******************************************************************************/
 
 /*******************************************************************************
-* FunName       : lm_kprintf()
+* FunName       : lm_output()
 * Description   : 格式化输出
 * EntryParam    : format,格式化字符串, ...,可变参数
 * ReturnValue   : None
 *******************************************************************************/
-void lm_kprintf(const char *format, ...)
+void lm_output(const char *format, ...)
 {
     va_list va;
 

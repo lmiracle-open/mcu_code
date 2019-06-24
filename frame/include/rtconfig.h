@@ -42,11 +42,6 @@
 
 /* Kernel Device Object */
 
-#define RT_USING_DEVICE
-/* RT_USING_INTERRUPT_INFO is not set */
-#define RT_USING_CONSOLE
-#define RT_CONSOLEBUF_SIZE 128
-#define RT_CONSOLE_DEVICE_NAME "uart1"
 /* RT_USING_MODULE is not set */
 
 /* RT-Thread Components */
@@ -60,31 +55,67 @@
 
 /* Command shell */
 
-//#define RT_USING_FINSH
-#define FINSH_USING_HISTORY
-#define FINSH_USING_SYMTAB
-#define FINSH_USING_DESCRIPTION
-#define FINSH_THREAD_PRIORITY 20
-#define FINSH_THREAD_STACK_SIZE 4096
-#define FINSH_CMD_SIZE 80
-/* FINSH_USING_AUTH is not set */
-#define FINSH_USING_MSH
-#define FINSH_USING_MSH_DEFAULT
-#define FINSH_USING_MSH_ONLY
-
-/* Device virtual file system */
-
-/* RT_USING_DFS is not set */
-
-/* Device Drivers */
-
-#define RT_USING_DEVICE_IPC
+#define RT_USING_DEVICE
+// </c>
+// <c1>Using device communication
+//  <i>Using device communication
+//#define RT_USING_DEVICE_IPC
+// </c>
+// <c1>Using Serial
+//  <i>Using Serial
 #define RT_USING_SERIAL
-#define RT_SERIAL_USING_DMA
+// </c>
+// </h>
+
+// <h>Console Configuration
+// <c1>Using console
+//  <i>Using console
+#define RT_USING_CONSOLE
+
+#define RTE_FINSH_USING_MSH
+#define RTE_USING_DEVICE
+// </c>
+// <o>the buffer size of console <1-1024>
+//  <i>the buffer size of console
+//  <i>Default: 128  (128Byte)
+#define RT_CONSOLEBUF_SIZE          128
+// <s>The device name for console
+//  <i>The device name for console
+//  <i>Default: uart1
+#define RT_CONSOLE_DEVICE_NAME      "uart3"
+// </h>
+
+
+#if defined(RTE_FINSH_USING_FINSH) || defined(RTE_FINSH_USING_MSH)
+#define RT_USING_FINSH
+// <h>Finsh Configuration
+// <o>the priority of finsh thread <1-7>
+//  <i>the priority of finsh thread
+//  <i>Default: 6
+#define __FINSH_THREAD_PRIORITY     6
+#define FINSH_THREAD_PRIORITY       (RT_THREAD_PRIORITY_MAX / 8 * __FINSH_THREAD_PRIORITY + 1)
+// <o>the stack of finsh thread <1-4096>
+//  <i>the stack of finsh thread
+//  <i>Default: 4096  (4096Byte)
+#define FINSH_THREAD_STACK_SIZE     4096
+// <o>the history lines of finsh thread <1-32>
+//  <i>the history lines of finsh thread
+//  <i>Default: 5
+#define FINSH_HISTORY_LINES         5
+// <c1>Using symbol table in finsh shell
+//  <i>Using symbol table in finsh shell
+#define FINSH_USING_SYMTAB
+// </c>
+// </h>
+#endif
+
+#if defined(RTE_FINSH_USING_MSH)
+#define FINSH_USING_MSH
+#endif
 /* RT_USING_CAN is not set */
 /* RT_USING_HWTIMER is not set */
 /* RT_USING_I2C is not set */
-#define RT_USING_PIN
+//#define RT_USING_PIN
 /* RT_USING_MTD_NOR is not set */
 /* RT_USING_MTD_NAND is not set */
 /* RT_USING_RTC is not set */
@@ -293,7 +324,10 @@
 #define RT_HSE_VALUE 8000000
 #define RT_HSE_HCLK 168000000
 /* RT_USING_UART1 is not set */
-#define RT_USING_UART2
+
+//#define FINSH_USING_MSH_ONLY
+#define RT_USING_UART
+#define RT_USING_UART3
 /* RT_USING_UART6 is not set */
 
 #endif

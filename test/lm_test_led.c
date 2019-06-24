@@ -80,6 +80,6 @@ LM_APP_TASK_2S(lm_test_led2_flicker);
 /*******************************************************************************
 * Description   : 注册3s应用程序任务
 *******************************************************************************/
-LM_APP_TASK_3S(lm_test_led3_flicker);
+//LM_APP_TASK_3S(lm_test_led3_flicker);
 
 /* end of file */
